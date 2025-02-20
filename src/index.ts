@@ -43,7 +43,9 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
     credentials: true,
   })
 );
