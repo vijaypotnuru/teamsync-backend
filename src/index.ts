@@ -23,6 +23,14 @@ import taskRoutes from './routes/task.route';
 const app = express();
 const BASE_PATH = config.BASE_PATH;
 
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
@@ -41,14 +49,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      callback(null, true);
-    },
-    credentials: true,
-  })
-);
+
 
 app.get(
   `/`,
