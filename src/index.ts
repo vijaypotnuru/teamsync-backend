@@ -51,12 +51,12 @@ app.use(
 app.get(
   `/`,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // throw new BadRequestException(
-    //   "This is a bad request",
-    //   ErrorCodeEnum.AUTH_INVALID_TOKEN
-    // );
+    throw new BadRequestException(
+      "This is a bad request",
+      ErrorCodeEnum.AUTH_INVALID_TOKEN
+    );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello Welcome to Teamsync",
+      message: "Hello World Teamsync",
     });
   })
 );
@@ -71,8 +71,6 @@ app.use(`${BASE_PATH}/task`, isAuthenticated, taskRoutes);
 app.use(errorHandler);
 
 app.listen(config.PORT, async () => {
-  console.log(
-    `Server listening on port http://localhost:${config.PORT} in ${config.NODE_ENV}`
-  );
+  console.log(`Server listening on port ${config.PORT} in ${config.NODE_ENV}`);
   await connectDatabase();
 });
