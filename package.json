@@ -7,7 +7,7 @@
     "seed": "ts-node src/seeders/role.seeder.ts",
     "dev": "ts-node-dev --files src/index.ts",
     "build": "tsc && cp package.json dist",
-    "start": "node dist/index.js"
+    "start": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
