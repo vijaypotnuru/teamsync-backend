@@ -23,54 +23,30 @@ import taskRoutes from "./routes/task.route";
 const app = express();
 const BASE_PATH = config.BASE_PATH;
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        config.FRONTEND_ORIGIN,
-        config.FRONTEND_ORIGIN.replace(/\/$/, ""),
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://teamsync-b2b.vercel.app",
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.log("Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Cookie",
-      "Origin",
-      "Accept",
-    ],
-    exposedHeaders: ["Set-Cookie"],
-  })
-);
-
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
     name: "session",
     keys: [config.SESSION_SECRET],
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 24 * 60 * 60 * 1000,
     secure: config.NODE_ENV === "production",
     httpOnly: true,
-    sameSite: config.NODE_ENV === "production" ? "none" : "lax",
-    domain: config.NODE_ENV === "production" ? ".vercel.app" : undefined,
+    sameSite: "lax",
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(
+  cors({
+    origin: config.FRONTEND_ORIGIN,
+    credentials: true,
+  })
+);
 
 app.get(
   `/`,
@@ -80,7 +56,7 @@ app.get(
     //   ErrorCodeEnum.AUTH_INVALID_TOKEN
     // );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Welcome to TeamSync",
+      message: "Hello Subscribe to the channel & share",
     });
   })
 );
