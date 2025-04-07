@@ -47,17 +47,21 @@ export const loginController = asyncHandler(
         info: { message: string } | undefined
       ) => {
         if (err) {
+          console.log("passport in login",err)
           return next(err);
         }
 
         if (!user) {
+          console.log("user not found", user)
           return res.status(HTTPSTATUS.UNAUTHORIZED).json({
             message: info?.message || "Invalid email or password",
           });
         }
 
         req.logIn(user, (err) => {
+
           if (err) {
+            console.log("req.logIn",user,err)
             return next(err);
           }
 
