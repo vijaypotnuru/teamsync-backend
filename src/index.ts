@@ -43,7 +43,17 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: config.FRONTEND_ORIGIN,
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        origin === config.FRONTEND_ORIGIN ||
+        origin === config.FRONTEND_ORIGIN.replace(/\/$/, "")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
