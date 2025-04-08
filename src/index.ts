@@ -27,6 +27,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+console.log("hi",config.NODE_ENV);
+
 app.use(
   session({
     secret: config.SESSION_SECRET,
@@ -61,7 +63,7 @@ app.get(
     //   ErrorCodeEnum.AUTH_INVALID_TOKEN
     // );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello TeamSync Project Management Tool",
+      message: `Hello TeamSync Project Management Tool ${config.NODE_ENV}`,
     });
   })
 );
