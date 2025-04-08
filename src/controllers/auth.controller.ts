@@ -38,7 +38,7 @@ export const registerUserController = asyncHandler(
 
 export const loginController = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("reqest in login", req.body);
+    console.log("Request in login", req.body);
     passport.authenticate(
       "local",
       (
@@ -47,12 +47,12 @@ export const loginController = asyncHandler(
         info: { message: string } | undefined
       ) => {
         if (err) {
-          console.log("passport in login", err);
+          console.log("Passport error in login", err);
           return next(err);
         }
 
         if (!user) {
-          console.log("user not found", user);
+          console.log("User not found", user);
           return res.status(HTTPSTATUS.UNAUTHORIZED).json({
             message: info?.message || "Invalid email or password",
           });
@@ -60,13 +60,18 @@ export const loginController = asyncHandler(
 
         req.logIn(user, (err) => {
           if (err) {
-            console.log("req.logIn", user, err);
+            console.log("req.logIn error", user, err);
             return next(err);
           }
+
+          console.log("Login successful, session established", req.session);
+          console.log("Is authenticated after login:", req.isAuthenticated());
 
           return res.status(HTTPSTATUS.OK).json({
             message: "Logged in successfully",
             user,
+            sessionInfo: req.session ? { id: req.session.id } : null,
+            authenticated: req.isAuthenticated(),
           });
         });
       }
@@ -76,6 +81,9 @@ export const loginController = asyncHandler(
 
 export const logOutController = asyncHandler(
   async (req: Request, res: Response) => {
+    console.log("Logout request received, session before logout:", req.session);
+    console.log("Is authenticated before logout:", req.isAuthenticated());
+
     req.logout((err) => {
       if (err) {
         console.error("Logout error:", err);
@@ -83,11 +91,35 @@ export const logOutController = asyncHandler(
           .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
           .json({ error: "Failed to log out" });
       }
-    });
 
-    req.session = null;
-    return res
-      .status(HTTPSTATUS.OK)
-      .json({ message: "Logged out successfully" });
+      console.log("User logged out successfully");
+      console.log("Is authenticated after logout:", req.isAuthenticated());
+
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Session destroy error:", err);
+        }
+      });
+
+      return res.status(HTTPSTATUS.OK).json({
+        message: "Logged out successfully",
+        authenticated: req.isAuthenticated(),
+      });
+    });
+  }
+);
+
+export const sessionCheckController = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("Session check:", req.isAuthenticated(), req.user);
+    if (req.isAuthenticated()) {
+      return res.status(HTTPSTATUS.OK).json({
+        authenticated: true,
+        user: req.user,
+      });
+    }
+    return res.status(HTTPSTATUS.UNAUTHORIZED).json({
+      authenticated: false,
+    });
   }
 );
