@@ -38,7 +38,7 @@ export const registerUserController = asyncHandler(
 
 export const loginController = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("reqest in login", req.body)
+    console.log("reqest in login", req.body);
     passport.authenticate(
       "local",
       (
@@ -47,21 +47,20 @@ export const loginController = asyncHandler(
         info: { message: string } | undefined
       ) => {
         if (err) {
-          console.log("passport in login",err)
+          console.log("passport in login", err);
           return next(err);
         }
 
         if (!user) {
-          console.log("user not found", user)
+          console.log("user not found", user);
           return res.status(HTTPSTATUS.UNAUTHORIZED).json({
             message: info?.message || "Invalid email or password",
           });
         }
 
         req.logIn(user, (err) => {
-
           if (err) {
-            console.log("req.logIn",user,err)
+            console.log("req.logIn", user, err);
             return next(err);
           }
 
