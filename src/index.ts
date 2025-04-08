@@ -56,7 +56,7 @@ app.get(
     //   ErrorCodeEnum.AUTH_INVALID_TOKEN
     // );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello TeamSync",
+      message: "Hello TeamSync Project Management Tool",
     });
   })
 );
