@@ -43,7 +43,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: config.FRONTEND_ORIGIN,
+    origin: ["http://localhost:5173", "https://teamsync-b2b.vercel.app"],
     credentials: true,
   })
 );
@@ -56,7 +56,7 @@ app.get(
       ErrorCodeEnum.AUTH_INVALID_TOKEN
     );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello Subscribe to the channel & share",
+      message: "Hello Welcome To TeamSync",
     });
   })
 );
