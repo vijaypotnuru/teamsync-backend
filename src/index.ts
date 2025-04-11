@@ -34,7 +34,8 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     secure: config.NODE_ENV === "production",
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: config.NODE_ENV === "production" ? "none" : "lax",
+    domain: config.NODE_ENV === "production" ? ".vibepattern.com" : undefined,
   })
 );
 
@@ -43,7 +44,13 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://teamsync-b2b.vercel.app"],
+    origin:
+      config.NODE_ENV === "production"
+        ? [
+            "https://teamsync-b2b.vercel.app",
+            "https://teamsyncapiroute.vibepattern.com",
+          ]
+        : "http://localhost:5173",
     credentials: true,
   })
 );
