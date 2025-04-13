@@ -63,7 +63,7 @@ app.get(
     //   ErrorCodeEnum.AUTH_INVALID_TOKEN
     // );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello Welcome To TeamSync",
+      message: `Hello Welcome To TeamSync '${config.NODE_ENV}' Environment`,
     });
   })
 );
